@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import Menu from "./menu/Menu";
+import Checkout from "./menu/checkout/Checkout";
+import list from "./menu/MenuJSON";
+import listItem from "./menu/checkout/DataDummy";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
+    <div>
+      <nav className="navbar bg-dark navbar-dark">
+        <img src={logo} style={{ width: 50 + "px" }} />
+        <a className="navbar-brand" href="#">
+          Tajuzza Cafe
         </a>
-      </header>
+      </nav>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-lg-8 col-md-12">
+            <h3 className="text-center my-3">Minuman</h3>
+            <Menu menu={list} />
+            <h3 className="text-center my-3">Minuman</h3>
+            <Menu menu={list} />
+          </div>
+          <div className="col-lg-4 col-md-12">
+            <Checkout item={listItem} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
