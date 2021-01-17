@@ -21,7 +21,7 @@ function CheckoutItem(props) {
           </Button>
         </td>
         <td>{item.nama}</td>
-        <td>{item.harga}</td>
+        <td className="money">{item.harga}</td>
         <td className="text-center">{item.qty}</td>
       </tr>
     </>

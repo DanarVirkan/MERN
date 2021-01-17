@@ -13,7 +13,7 @@ function MenuCard(props) {
   const item = props.item;
   return (
     <>
-      <TModal showing={show} close={handleClose} content={item} type="buy"/>
+      <TModal showing={show} close={handleClose} content={item} type="buy" />
       <div className="col p-1 mb-2">
         <div className="card p-0 border-primary">
           <img
@@ -32,8 +32,8 @@ function MenuCard(props) {
             }}
             onClick={handleShow}
           >
-            <FontAwesomeIcon icon="shopping-cart" className="mr-2"/>
-            {item.harga}
+            <FontAwesomeIcon icon="shopping-cart" className="mr-2" />
+            <span className="money">{item.harga}</span>
           </Button>
         </div>
       </div>

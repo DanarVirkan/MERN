@@ -57,7 +57,7 @@ function Checkout(props) {
               </h2>
               <div>
                 <p className="mb-0">Total</p>
-                <h3 className="m-0">Rp. {total}</h3>
+                <h3 className="m-0 money">{total}</h3>
               </div>
             </div>
             <div className="d-flex">

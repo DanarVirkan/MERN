@@ -5,6 +5,7 @@ import { Modal, ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import React from "react";
 import ModalButton from "./ModalButton";
+import { format } from "currencyformatter.js";
 
 library.add(faMoneyBillWave);
 const modalType = ["buy", "edit", "checkout", "loading"];
@@ -34,6 +35,7 @@ const modal = [
 class TModal extends React.Component {
   constructor(props) {
     super(props);
+
     this.indexModal = modalType.indexOf(this.props.type);
     const data = this.props.content;
     const isBeli = this.indexModal == 0 ? true : false;
@@ -65,8 +67,11 @@ class TModal extends React.Component {
           required
         />
         <h4 className="text-center">
-          <FontAwesomeIcon icon="money-bill-wave" className="mr-2"/>
-          Total : {this.state.quantity * this.state.harga}
+          <FontAwesomeIcon icon="money-bill-wave" className="mr-2" />
+          Total :{" "}
+          {format(this.state.quantity * this.state.harga, {
+            currency: "IDR",
+          })}
         </h4>
       </>
     );
@@ -77,8 +82,8 @@ class TModal extends React.Component {
       <>
         <h4 className="mt-5 text-center">Are you sure ?</h4>
         <h5 className="mb-4 text-center">
-          <FontAwesomeIcon icon="money-bill-wave" className="mr-2"/>
-          Total : {this.props.content}
+          <FontAwesomeIcon icon="money-bill-wave" className="mr-2" />
+          Total : {format(this.props.content, { currency: "IDR" })}
         </h5>
       </>
     );
