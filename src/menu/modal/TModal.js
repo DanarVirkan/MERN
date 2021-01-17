@@ -7,6 +7,7 @@ import React from "react";
 import ModalButton from "./ModalButton";
 import { format } from "currencyformatter.js";
 
+const currencyPattern = "! ,##0.";
 library.add(faMoneyBillWave);
 const modalType = ["buy", "edit", "checkout", "loading"];
 const modal = [
@@ -71,6 +72,7 @@ class TModal extends React.Component {
           Total :{" "}
           {format(this.state.quantity * this.state.harga, {
             currency: "IDR",
+            pattern: currencyPattern,
           })}
         </h4>
       </>
@@ -83,7 +85,11 @@ class TModal extends React.Component {
         <h4 className="mt-5 text-center">Are you sure ?</h4>
         <h5 className="mb-4 text-center">
           <FontAwesomeIcon icon="money-bill-wave" className="mr-2" />
-          Total : {format(this.props.content, { currency: "IDR" })}
+          Total :{" "}
+          {format(this.props.content, {
+            currency: "IDR",
+            pattern: currencyPattern,
+          })}
         </h5>
       </>
     );
