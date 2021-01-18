@@ -42,6 +42,7 @@ class ModalButton extends React.Component {
             borderBottomRightRadius:
               this.position == 0 ? 0 : this.radius + "px",
           }}
+          onClick={this.props.onClick}
         >
           <FontAwesomeIcon
             icon={[

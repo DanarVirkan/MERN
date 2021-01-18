@@ -25,6 +25,7 @@ const modal = [
     head: false,
     body: "message",
     button: ["ok", "cancel"],
+    action: [],
   },
   {
     head: false,
@@ -40,16 +41,21 @@ class TModal extends React.Component {
     this.indexModal = modalType.indexOf(this.props.type);
     const data = this.props.content;
     const isBeli = this.indexModal == 0 ? true : false;
-    const isCheckout = this.index == 2 ? true : false;
-
+    const isCheckout = this.indexModal == 2 ? true : false;
     this.state = {
+      showing: false,
       judul: isCheckout ? null : data.nama,
       harga: isCheckout ? data : data.harga,
       quantity: isBeli ? 1 : data.qty,
     };
-
     this.handleChange = this.handleChange.bind(this);
   }
+
+  handleShowing = () => {
+    this.setState({
+      showing: !this.state.showing,
+    });
+  };
 
   setShow(show) {
     return show ? "d-flex" : "d-none";
@@ -86,7 +92,7 @@ class TModal extends React.Component {
         <h5 className="mb-4 text-center">
           <FontAwesomeIcon icon="money-bill-wave" className="mr-2" />
           Total :{" "}
-          {format(this.props.content, {
+          {format(this.state.harga, {
             currency: "IDR",
             pattern: currencyPattern,
           })}
@@ -115,7 +121,11 @@ class TModal extends React.Component {
 
   render() {
     return (
-      <Modal show={this.props.showing} onHide={this.props.close}>
+      <Modal
+        show={this.state.showing}
+        onHide={this.handleShowing}
+        backdrop="static"
+      >
         <ModalHeader
           closeButton
           className={this.setShow(modal[this.indexModal].head)}
@@ -127,7 +137,12 @@ class TModal extends React.Component {
         </ModalBody>
         <div className="d-flex">
           {modal[this.indexModal].button.map((i, index) => (
-            <ModalButton key={index} position={index} type={i} />
+            <ModalButton
+              key={index}
+              position={index}
+              type={i}
+              onClick={this.handleShowing}
+            />
           ))}
         </div>
       </Modal>
