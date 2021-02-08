@@ -17,8 +17,8 @@ const button = [
   { variant: "primary", text: "Buy", icon: "shopping-cart", prefix: "fas" },
   { variant: "warning", text: "Edit", icon: "pencil-alt", prefix: "fas" },
   { variant: "danger", text: "Delete", icon: "trash-alt", prefix: "far" },
-  { variant: "success", text: "OK", icon: "check", prefix: "fas" },
-  { variant: "danger", text: "Cancel", icon: "times", prefix: "fas" },
+  { variant: "outline-primary", text: "OK", icon: "check", prefix: "fas" },
+  { variant: "outline-primary", text: "Cancel", icon: "times", prefix: "fas" },
 ];
 
 class ModalButton extends React.Component {

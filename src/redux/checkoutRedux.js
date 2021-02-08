@@ -61,7 +61,7 @@ const sorter = (payload, ...item) => {
       ...item.slice(0, index),
       {
         ...item[index],
-        qty: item[index].qty + payload.qty,
+        qty: parseInt(item[index].qty) + parseInt(payload.qty),
       },
       ...item.slice(index + 1),
     ];
