@@ -3,24 +3,20 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import React from "react";
 import { Button } from "react-bootstrap";
-import TModal from "./modal/TModal";
+import { toggleShow } from "../redux/modalRedux";
+import { connect } from "react-redux";
+import { currency, MODAL_BUY } from "../constant";
 
 library.add(faShoppingCart);
 class MenuCard extends React.Component {
   constructor(props) {
     super(props);
-    this.modalElement = React.createRef();
     this.item = this.props.item;
   }
-  
-  modalShow = () => {
-    this.modalElement.current.handleShowing();
-  };
 
   render() {
     return (
       <>
-        <TModal ref={this.modalElement} content={this.item} type="buy" />
         <div className="col p-1 mb-2">
           <div className="card p-0 border-primary">
             <img
@@ -37,10 +33,10 @@ class MenuCard extends React.Component {
                 borderBottomRightRadius: 2 + "px",
                 borderBottomLeftRadius: 2 + "px",
               }}
-              onClick={this.modalShow}
+              onClick={() => this.props.show()}
             >
               <FontAwesomeIcon icon="shopping-cart" className="mr-2" />
-              <span className="money">{this.item.harga}</span>
+              <span>{currency(this.item.harga)}</span>
             </Button>
           </div>
         </div>
@@ -49,4 +45,19 @@ class MenuCard extends React.Component {
   }
 }
 
-export default MenuCard;
+const itemMapper = (item) => {
+  return {
+    id: item.id,
+    nama: item.nama,
+    harga: item.harga,
+    qty: 1,
+  };
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    show: () => dispatch(toggleShow(itemMapper(ownProps.item), MODAL_BUY)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(MenuCard);

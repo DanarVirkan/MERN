@@ -7,26 +7,24 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import "./CheckoutItem";
 import CheckoutItem from "./CheckoutItem";
 import { Button } from "react-bootstrap";
-import TModal from "../modal/TModal";
 import React from "react";
+import { connect } from "react-redux";
+import { toggleShow } from "../../redux/modalRedux";
+import { currency, MODAL_CHECKOUT } from "../../constant";
 
 library.add(faCheckCircle, faCashRegister);
 class Checkout extends React.Component {
   constructor(props) {
     super(props);
-    this.modalElement = React.createRef();
-    this.total = 0;
-    this.props.item.map((i) => (this.total += i.qty * i.harga));
   }
 
-  modalShow = () => {
-    this.modalElement.current.handleShowing();
-  };
-
   render() {
+    this.total = 0;
+    this.props.item.map((i) => {
+      this.total += i.qty * i.harga;
+    });
     return (
       <>
-        <TModal ref={this.modalElement} content={this.total} type="checkout" />
         <div
           className="card border-warning position-sticky my-2 checkout-height"
           style={{ top: 90 }}
@@ -45,8 +43,8 @@ class Checkout extends React.Component {
                 </tr>
               </thead>
               <tbody>
-                {this.props.item.map((i) => (
-                  <CheckoutItem key={i.id} data={i} />
+                {this.props.item.map((i, index) => (
+                  <CheckoutItem key={i.id} data={i} index={index} />
                 ))}
               </tbody>
             </table>
@@ -57,14 +55,20 @@ class Checkout extends React.Component {
                 </h2>
                 <div>
                   <p className="mb-0">Total</p>
-                  <h3 className="m-0 money">{this.total}</h3>
+                  <h3 className="m-0">{currency(this.total)}</h3>
                 </div>
               </div>
               <div className="d-flex">
                 <Button
                   variant="success"
                   className="mt-auto"
-                  onClick={this.modalShow}
+                  onClick={() =>
+                    this.props.show({
+                      id: 1,
+                      nama: "",
+                      harga: this.total,
+                    })
+                  }
                 >
                   <FontAwesomeIcon icon="check-circle" className="mr-2" />
                   Checkout
@@ -78,4 +82,16 @@ class Checkout extends React.Component {
   }
 }
 
-export default Checkout;
+const mapStateToProps = (state) => {
+  return {
+    item: state.checkout.item,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    show: (item) => dispatch(toggleShow(item, MODAL_CHECKOUT)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Checkout);

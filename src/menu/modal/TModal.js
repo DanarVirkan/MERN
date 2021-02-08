@@ -5,62 +5,113 @@ import { Modal, ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import React from "react";
 import ModalButton from "./ModalButton";
-import { format } from "currencyformatter.js";
+import { add, edit, remove } from "../../redux/checkoutRedux";
+import { setQty, toggleHide } from "../../redux/modalRedux";
+import { connect } from "react-redux";
+import {
+  currency,
+  MODAL_BUY,
+  MODAL_EDIT,
+  MODAL_CHECKOUT,
+} from "../../constant";
 
-const currencyPattern = "! ,##0.";
 library.add(faMoneyBillWave);
-const modalType = ["buy", "edit", "checkout", "loading"];
-const modal = [
-  {
-    head: true,
-    body: "input",
-    button: ["buy"],
-  },
-  {
-    head: true,
-    body: "input",
-    button: ["edit", "delete"],
-  },
-  {
-    head: false,
-    body: "message",
-    button: ["ok", "cancel"],
-    action: [],
-  },
-  {
-    head: false,
-    body: "image",
-    button: [],
-  },
-];
-
 class TModal extends React.Component {
   constructor(props) {
     super(props);
 
-    this.indexModal = modalType.indexOf(this.props.type);
-    const data = this.props.content;
-    const isBeli = this.indexModal == 0 ? true : false;
-    const isCheckout = this.indexModal == 2 ? true : false;
-    this.state = {
-      showing: false,
-      judul: isCheckout ? null : data.nama,
-      harga: isCheckout ? data : data.harga,
-      quantity: isBeli ? 1 : data.qty,
+    this.modalType = {};
+    this.switcher = (modal) => {
+      switch (modal) {
+        case MODAL_BUY:
+          this.modalType = {
+            head: true,
+            body: "input",
+            button: [
+              {
+                type: "buy",
+                action: this.buy,
+              },
+            ],
+          };
+          break;
+        case MODAL_EDIT:
+          this.modalType = {
+            head: true,
+            body: "input",
+            button: [
+              {
+                type: "edit",
+                action: this.edit,
+              },
+              {
+                type: "delete",
+                action: this.remove,
+              },
+            ],
+          };
+          break;
+        case MODAL_CHECKOUT:
+          this.modalType = {
+            head: false,
+            body: "message",
+            button: [
+              {
+                type: "ok",
+                action: this.handleShowing,
+              },
+              {
+                type: "cancel",
+                action: this.handleShowing,
+              },
+            ],
+          };
+          break;
+        default:
+          this.modalType = {
+            head: true,
+            body: "input",
+            button: [
+              {
+                type: "buy",
+                action: this.buy,
+              },
+            ],
+          };
+          break;
+      }
     };
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleShowing = () => {
-    this.setState({
-      showing: !this.state.showing,
+    this.props.hide();
+  };
+
+  buy = () => {
+    this.handleShowing();
+    this.props.add({
+      id: this.props.content.id,
+      nama: this.props.content.nama,
+      harga: this.props.content.harga,
+      qty: this.props.content.qty,
     });
+  };
+
+  edit = () => {
+    this.handleShowing();
+    this.props.edit(this.props.index, this.props.content.qty);
+  };
+
+  remove = () => {
+    this.handleShowing();
+    console.log(this.props.index);
+    this.props.remove(this.props.index);
   };
 
   setShow(show) {
     return show ? "d-flex" : "d-none";
   }
-
   input() {
     return (
       <>
@@ -70,16 +121,12 @@ class TModal extends React.Component {
           onChange={this.handleChange}
           min="1"
           max="9"
-          value={this.state.quantity}
+          value={this.props.content.qty}
           required
         />
         <h4 className="text-center">
           <FontAwesomeIcon icon="money-bill-wave" className="mr-2" />
-          Total :{" "}
-          {format(this.state.quantity * this.state.harga, {
-            currency: "IDR",
-            pattern: currencyPattern,
-          })}
+          Total : {currency(this.props.content.qty * this.props.content.harga)}
         </h4>
       </>
     );
@@ -91,18 +138,14 @@ class TModal extends React.Component {
         <h4 className="mt-5 text-center">Are you sure ?</h4>
         <h5 className="mb-4 text-center">
           <FontAwesomeIcon icon="money-bill-wave" className="mr-2" />
-          Total :{" "}
-          {format(this.state.harga, {
-            currency: "IDR",
-            pattern: currencyPattern,
-          })}
+          Total : {currency(this.props.content.harga)}
         </h5>
       </>
     );
   }
 
   bodySwitch() {
-    switch (modal[this.indexModal].body) {
+    switch (this.modalType.body) {
       case "input":
         return this.input();
       case "message":
@@ -113,35 +156,33 @@ class TModal extends React.Component {
   handleChange(event) {
     const value = event.target.value;
     if (value < 1 || value > 9) {
-      this.setState({ quantity: this.state.quantity });
+      this.props.setQty(this.props.content.qty);
     } else {
-      this.setState({ quantity: value });
+      this.props.setQty(value);
     }
   }
 
   render() {
+    this.switcher(this.props.modalType);
     return (
       <Modal
-        show={this.state.showing}
+        show={this.props.showing}
         onHide={this.handleShowing}
         backdrop="static"
       >
-        <ModalHeader
-          closeButton
-          className={this.setShow(modal[this.indexModal].head)}
-        >
-          <h5 className="modal-title">{this.state.judul}</h5>
+        <ModalHeader closeButton className={this.setShow(this.modalType.head)}>
+          <h5 className="modal-title">{this.props.content.nama}</h5>
         </ModalHeader>
         <ModalBody className="d-flex flex-column">
           {this.bodySwitch()}
         </ModalBody>
         <div className="d-flex">
-          {modal[this.indexModal].button.map((i, index) => (
+          {this.modalType.button.map((i, index) => (
             <ModalButton
               key={index}
               position={index}
-              type={i}
-              onClick={this.handleShowing}
+              type={i.type}
+              modalControl={i.action}
             />
           ))}
         </div>
@@ -149,4 +190,24 @@ class TModal extends React.Component {
     );
   }
 }
-export default TModal;
+
+const mapStateToProps = (state) => {
+  return {
+    showing: state.modal.showing,
+    content: state.modal.content,
+    modalType: state.modal.modalType,
+    index: state.modal.index,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    hide: () => dispatch(toggleHide()),
+    add: (item) => dispatch(add(item)),
+    remove: (index) => dispatch(remove(index)),
+    edit: (index, value) => dispatch(edit(index, value)),
+    setQty: (value) => dispatch(setQty(value)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TModal);

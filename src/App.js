@@ -2,7 +2,6 @@ import logo from "./logo.svg";
 import Menu from "./menu/Menu";
 import Checkout from "./menu/checkout/Checkout";
 import list from "./menu/MenuJSON";
-import listItem from "./menu/checkout/DataDummy";
 
 function App() {
   return (
@@ -22,7 +21,7 @@ function App() {
             <Menu menu={list} />
           </div>
           <div className="col-lg-4 col-md-12">
-            <Checkout item={listItem} />
+            <Checkout />
           </div>
         </div>
       </div>
