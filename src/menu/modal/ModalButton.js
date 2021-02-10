@@ -29,6 +29,10 @@ class ModalButton extends React.Component {
     this.radius = 4;
   }
 
+  disabledCtrl = (bool) => {
+    return this.indexButton == 2 ? false : bool;
+  };
+
   render() {
     return (
       <div className="w-100">
@@ -43,6 +47,7 @@ class ModalButton extends React.Component {
               this.position == 0 ? 0 : this.radius + "px",
           }}
           onClick={() => this.props.modalControl()}
+          disabled={this.disabledCtrl(this.props.disabled)}
         >
           <FontAwesomeIcon
             icon={[

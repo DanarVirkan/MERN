@@ -155,7 +155,10 @@ class TModal extends React.Component {
 
   handleChange(event) {
     const value = event.target.value;
-    if (value < 1 || value > 9) {
+    if (value === "0") {
+      return false;
+    }
+    if (value > 9) {
       this.props.setQty(this.props.content.qty);
     } else {
       this.props.setQty(value);
@@ -183,6 +186,7 @@ class TModal extends React.Component {
               position={index}
               type={i.type}
               modalControl={i.action}
+              disabled={this.props.content.qty < 1 && true}
             />
           ))}
         </div>

@@ -61,11 +61,18 @@ const sorter = (payload, ...item) => {
       ...item.slice(0, index),
       {
         ...item[index],
-        qty: parseInt(item[index].qty) + parseInt(payload.qty),
+        qty: max(9, item[index].qty, payload.qty),
       },
       ...item.slice(index + 1),
     ];
   } else {
     return [...item, payload];
   }
+};
+
+const max = (max, ...value) => {
+  let sum = 0;
+  for (let num of value) sum += num;
+  if (sum > max) alert("Order maksimal " + max);
+  return sum > max ? max : sum;
 };
