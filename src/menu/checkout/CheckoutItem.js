@@ -17,14 +17,14 @@ class CheckoutItem extends React.Component {
     return (
       <>
         <tr>
-          <td className="text-center">
+          <td className="text-center align-middle">
             <Button variant="warning" onClick={() => this.props.show()}>
               <FontAwesomeIcon icon="pencil-alt" />
             </Button>
           </td>
-          <td>{this.props.data.nama}</td>
-          <td>{currency(this.props.data.harga)}</td>
-          <td className="text-center">{this.props.data.qty}</td>
+          <td className="align-middle">{this.props.data.nama}</td>
+          <td className="align-middle">{currency(this.props.data.harga)}</td>
+          <td className="text-center align-middle">{this.props.data.qty}</td>
         </tr>
       </>
     );

@@ -29,6 +29,24 @@ const menu = [
     nama: "Chocholatos Matcha",
     harga: 6000,
   },
+  {
+    id: 6,
+    gambar: "",
+    nama: "Milo",
+    harga: 6000,
+  },
+  {
+    id: 7,
+    gambar: "",
+    nama: "Es Kepal",
+    harga: 5000,
+  },
+  {
+    id: 8,
+    gambar: "",
+    nama: "Luwak White Coffee",
+    harga: 4000,
+  },
 ];
 
 export default menu;

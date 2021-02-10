@@ -2,7 +2,14 @@
     === XS
 */
 
-@media (max-width: 575.98px) {}
+@media (max-width: 575.98px) {
+    .checkout-table {
+        height: 82%;
+    }
+    .checkout-height {
+        height: 55vh;
+    }
+}
 
 
 /* Small devices (landscape phones, 576px and up) 
@@ -12,6 +19,9 @@
 @media (min-width: 576px) and (max-width: 767.98px) {
     .checkout-height {
         height: 55vh;
+    }
+    .checkout-table {
+        height: 60%;
     }
 }
 
@@ -24,6 +34,9 @@
     .checkout-height {
         height: 55vh;
     }
+    .checkout-table {
+        height: 70%;
+    }
 }
 
 
@@ -31,7 +44,14 @@
     === LG
 */
 
-@media (min-width: 992px) and (max-width: 1199.98px) {}
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .checkout-height {
+        height: 85vh;
+    }
+    .checkout-table {
+        height: 87%;
+    }
+}
 
 
 /* Extra large devices (large desktops, 1200px and up) 
@@ -42,4 +62,16 @@
     .checkout-height {
         height: 85vh;
     }
+    .checkout-table {
+        height: 90%;
+    }
+}
+
+.checkout-table th {
+    position: sticky;
+    top: 0;
+}
+
+.checkout-table {
+    overflow-y: auto;
 }

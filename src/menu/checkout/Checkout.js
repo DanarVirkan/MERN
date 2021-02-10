@@ -33,23 +33,33 @@ class Checkout extends React.Component {
             <h5 className="m-0">List Pembelian</h5>
           </div>
           <div className="card-body d-flex flex-column">
-            <table className="table">
-              <thead className="bg-dark text-white">
-                <tr>
-                  <td className="text-center">Edit</td>
-                  <td>Item</td>
-                  <td>Harga</td>
-                  <td className="text-center">Qty</td>
-                </tr>
-              </thead>
-              <tbody>
-                {this.props.item.map((i, index) => (
-                  <CheckoutItem key={i.id} data={i} index={index} />
-                ))}
-              </tbody>
-            </table>
-            <div className="d-flex justify-content-between mt-auto">
-              <div className="d-flex">
+            <div className="checkout-table">
+              <table className="table">
+                <thead className="text-white">
+                  <tr>
+                    <th className="bg-dark text-center">Edit</th>
+                    <th className="bg-dark">Item</th>
+                    <th className="bg-dark">Harga</th>
+                    <th className="bg-dark text-center">Qty</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.props.item.length > 0 ? (
+                    this.props.item.map((i, index) => (
+                      <CheckoutItem key={i.id} data={i} index={index} />
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4" className="text-center py-4">
+                        "NO DATA"
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+            <div className="d-flex justify-content-between mt-auto flex-column flex-md-row flex-lg-column flex-xl-row">
+              <div className="d-none d-md-flex d-lg-none d-xl-flex">
                 <h2 className="my-auto mr-3">
                   <FontAwesomeIcon icon="cash-register" size="lg" />
                 </h2>
@@ -61,7 +71,7 @@ class Checkout extends React.Component {
               <div className="d-flex">
                 <Button
                   variant="success"
-                  className="mt-auto"
+                  className="mt-auto ml-auto"
                   onClick={() =>
                     this.props.show({
                       id: 1,
@@ -69,6 +79,7 @@ class Checkout extends React.Component {
                       harga: this.total,
                     })
                   }
+                  disabled={this.props.item < 1 && true}
                 >
                   <FontAwesomeIcon icon="check-circle" className="mr-2" />
                   Checkout
