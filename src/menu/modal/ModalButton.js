@@ -9,10 +9,23 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  BUTTON_BUY,
+  BUTTON_DELETE,
+  BUTTON_EDIT,
+  BUTTON_OK,
+  BUTTON_CANCEL,
+} from "../../constant";
 
 library.add(faPencilAlt, faShoppingCart, faTrashAlt, faCheck, faTimes);
 
-const buttonType = ["buy", "edit", "delete", "ok", "cancel"];
+const buttonType = [
+  BUTTON_BUY,
+  BUTTON_EDIT,
+  BUTTON_DELETE,
+  BUTTON_OK,
+  BUTTON_CANCEL,
+];
 const button = [
   { variant: "primary", text: "Buy", icon: "shopping-cart", prefix: "fas" },
   { variant: "warning", text: "Edit", icon: "pencil-alt", prefix: "fas" },

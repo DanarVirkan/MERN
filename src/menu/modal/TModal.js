@@ -5,14 +5,23 @@ import { Modal, ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import React from "react";
 import ModalButton from "./ModalButton";
-import { add, edit, remove } from "../../redux/checkoutRedux";
+import { actionBuy, actionEdit, actionDelete } from "../../redux/checkoutRedux";
 import { setQty, toggleHide } from "../../redux/modalRedux";
 import { connect } from "react-redux";
+import spinner from "../../spinner.svg";
 import {
   currency,
   MODAL_BUY,
   MODAL_EDIT,
   MODAL_CHECKOUT,
+  BODY_INPUT,
+  BODY_MESSAGE,
+  BODY_LOADING,
+  BUTTON_BUY,
+  BUTTON_EDIT,
+  BUTTON_DELETE,
+  BUTTON_OK,
+  BUTTON_CANCEL,
 } from "../../constant";
 
 library.add(faMoneyBillWave);
@@ -26,10 +35,10 @@ class TModal extends React.Component {
         case MODAL_BUY:
           this.modalType = {
             head: true,
-            body: "input",
+            body: BODY_INPUT,
             button: [
               {
-                type: "buy",
+                type: BUTTON_BUY,
                 action: this.buy,
               },
             ],
@@ -38,15 +47,15 @@ class TModal extends React.Component {
         case MODAL_EDIT:
           this.modalType = {
             head: true,
-            body: "input",
+            body: BODY_INPUT,
             button: [
               {
-                type: "edit",
+                type: BUTTON_EDIT,
                 action: this.edit,
               },
               {
-                type: "delete",
-                action: this.remove,
+                type: BUTTON_DELETE,
+                action: this.delete,
               },
             ],
           };
@@ -54,29 +63,31 @@ class TModal extends React.Component {
         case MODAL_CHECKOUT:
           this.modalType = {
             head: false,
-            body: "message",
+            body: BODY_MESSAGE,
             button: [
               {
-                type: "ok",
+                type: BUTTON_OK,
                 action: this.handleShowing,
               },
               {
-                type: "cancel",
+                type: BUTTON_CANCEL,
                 action: this.handleShowing,
               },
             ],
           };
           break;
+        case BODY_LOADING:
+          this.modalType = {
+            head: true,
+            body: BODY_LOADING,
+            button: [],
+          };
+          break;
         default:
           this.modalType = {
             head: true,
-            body: "input",
-            button: [
-              {
-                type: "buy",
-                action: this.buy,
-              },
-            ],
+            body: BODY_LOADING,
+            button: [],
           };
           break;
       }
@@ -90,7 +101,7 @@ class TModal extends React.Component {
 
   buy = () => {
     this.handleShowing();
-    this.props.add({
+    this.props.buy({
       id: this.props.content.id,
       nama: this.props.content.nama,
       harga: this.props.content.harga,
@@ -103,15 +114,15 @@ class TModal extends React.Component {
     this.props.edit(this.props.index, this.props.content.qty);
   };
 
-  remove = () => {
+  delete = () => {
     this.handleShowing();
-    console.log(this.props.index);
-    this.props.remove(this.props.index);
+    this.props.delete(this.props.index);
   };
 
   setShow(show) {
     return show ? "d-flex" : "d-none";
   }
+
   input() {
     return (
       <>
@@ -144,12 +155,18 @@ class TModal extends React.Component {
     );
   }
 
+  loading() {
+    return <img src={spinner} className="w-75 mx-auto my-4" />;
+  }
+
   bodySwitch() {
     switch (this.modalType.body) {
-      case "input":
+      case BODY_INPUT:
         return this.input();
-      case "message":
+      case BODY_MESSAGE:
         return this.message();
+      case BODY_LOADING:
+        return this.loading();
     }
   }
 
@@ -172,10 +189,17 @@ class TModal extends React.Component {
         show={this.props.showing}
         onHide={this.handleShowing}
         backdrop="static"
+        size={this.modalType.body == BODY_LOADING && "sm"}
+        centered={this.modalType.body == BODY_LOADING && true}
       >
-        <ModalHeader closeButton className={this.setShow(this.modalType.head)}>
-          <h5 className="modal-title">{this.props.content.nama}</h5>
-        </ModalHeader>
+        {this.modalType.body != BODY_LOADING && (
+          <ModalHeader
+            closeButton
+            className={this.setShow(this.modalType.head)}
+          >
+            <h5 className="modal-title">{this.props.content.nama}</h5>
+          </ModalHeader>
+        )}
         <ModalBody className="d-flex flex-column">
           {this.bodySwitch()}
         </ModalBody>
@@ -207,9 +231,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     hide: () => dispatch(toggleHide()),
-    add: (item) => dispatch(add(item)),
-    remove: (index) => dispatch(remove(index)),
-    edit: (index, value) => dispatch(edit(index, value)),
+    buy: (item) => dispatch(actionBuy(item)),
+    delete: (index) => dispatch(actionDelete(index)),
+    edit: (index, value) => dispatch(actionEdit(index, value)),
     setQty: (value) => dispatch(setQty(value)),
   };
 };

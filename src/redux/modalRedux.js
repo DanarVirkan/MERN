@@ -7,7 +7,7 @@ export const setQty = (value) => {
   };
 };
 
-export const toggleShow = (content = {}, modalType, index = 1) => {
+export const toggleShow = (content = { nama: "" }, modalType, index = 1) => {
   return {
     type: SHOW,
     payload: { content: content, modalType: modalType, index: index },
@@ -20,7 +20,7 @@ export const toggleHide = () => {
   };
 };
 
-let initialState = {
+const initialState = {
   showing: false,
   content: {},
   modalType: "",

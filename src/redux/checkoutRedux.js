@@ -1,36 +1,37 @@
-import { ADD, EDIT, REMOVE } from "../constant";
+import { BUY, DELETE, EDIT, MAX_QTY } from "../constant";
 
-export const add = (item) => {
-  return { type: ADD, payload: item };
+export const actionBuy = (item) => {
+  return { type: BUY, payload: item };
 };
 
-export const edit = (index, value) => {
+export const actionEdit = (index, value) => {
   return {
     type: EDIT,
     payload: { index: index, value: value },
   };
 };
 
-export const remove = (index) => {
-  return { type: REMOVE, payload: index };
+export const actionDelete = (index) => {
+  return { type: DELETE, payload: index };
 };
 
-const defaultState = {
+const initialState = {
   item: [],
 };
-export const checkoutReducer = (state = defaultState, action) => {
+
+export const checkoutReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD:
+    case BUY:
       return {
         ...state,
-        item: sorter(action.payload, ...state.item),
+        item: addItem(action.payload, ...state.item),
       };
     case EDIT:
       return {
         ...state,
-        item: editLogic(action.payload, ...state.item),
+        item: editItem(action.payload, ...state.item),
       };
-    case REMOVE:
+    case DELETE:
       return {
         ...state,
         item: [
@@ -43,7 +44,7 @@ export const checkoutReducer = (state = defaultState, action) => {
   }
 };
 
-const editLogic = (payload, ...item) => {
+const editItem = (payload, ...item) => {
   return [
     ...item.slice(0, payload.index),
     {
@@ -54,14 +55,16 @@ const editLogic = (payload, ...item) => {
   ];
 };
 
-const sorter = (payload, ...item) => {
+// Adding qty instead when item is already listed
+const addItem = (payload, ...item) => {
   let index = item.findIndex((obj) => obj.id === payload.id);
   if (index != -1) {
+    // If already listed
     return [
       ...item.slice(0, index),
       {
         ...item[index],
-        qty: max(9, item[index].qty, payload.qty),
+        qty: maxQty(MAX_QTY, item[index].qty, payload.qty),
       },
       ...item.slice(index + 1),
     ];
@@ -70,9 +73,9 @@ const sorter = (payload, ...item) => {
   }
 };
 
-const max = (max, ...value) => {
+const maxQty = (max, ...value) => {
   let sum = 0;
-  for (let num of value) sum += num;
+  for (let num of value) sum += parseInt(num);
   if (sum > max) alert("Order maksimal " + max);
   return sum > max ? max : sum;
 };

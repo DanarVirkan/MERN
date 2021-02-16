@@ -1,7 +1,6 @@
 import logo from "./logo.svg";
 import Menu from "./menu/Menu";
 import Checkout from "./menu/checkout/Checkout";
-import list from "./menu/MenuJSON";
 
 function App() {
   return (
@@ -16,9 +15,9 @@ function App() {
         <div className="row">
           <div className="col-lg-8 col-md-12">
             <h3 className="text-center my-3">Minuman</h3>
-            <Menu menu={list} />
+            <Menu/>
             <h3 className="text-center my-3">Minuman</h3>
-            <Menu menu={list} />
+            <Menu/>
           </div>
           <div className="col-lg-4 col-md-12">
             <Checkout />

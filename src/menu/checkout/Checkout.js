@@ -74,8 +74,6 @@ class Checkout extends React.Component {
                   className="mt-auto ml-auto"
                   onClick={() =>
                     this.props.show({
-                      id: 1,
-                      nama: "",
                       harga: this.total,
                     })
                   }
